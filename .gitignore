@@ -1,0 +1,42 @@
+# Build outputs
+**/bin/
+**/obj/
+*.apk
+*.aab
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# Models (large binary files)
+kyc-sdk/core/models/*.tflite
+kyc-sdk/core/models/*.task
+
+# Claude
+.claude/
+
+# MDAN internal
+_mdan/
+
+# Licence keys (PRIVATE!)
+kyc-sdk/tools/licence-generator/keys/private_key.pem
+kyc-sdk/tools/licence-generator/.venv/
+kyc-sdk/tools/licence-generator/licences/
+IMGS_SRC/
+kyc-sdk/tools/
+kyc-sdk/demo-app/
+Project.md
+sdmatch.keystore
+*.apk
+kyc-sdk/licence-server/
+kyc-sdk/android-app/
+kyc-sdk/core/
+kyc-sdk/platform/
+*.idsig
+*.apk
