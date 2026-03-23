@@ -3,6 +3,7 @@
 **/obj/
 *.apk
 *.aab
+*.idsig
 
 # IDE
 .vs/
@@ -15,8 +16,8 @@
 Thumbs.db
 
 # Models (large binary files)
-kyc-sdk/core/models/*.tflite
-kyc-sdk/core/models/*.task
+core/models/*.tflite
+core/models/*.task
 
 # Claude
 .claude/
@@ -25,18 +26,30 @@ kyc-sdk/core/models/*.task
 _mdan/
 
 # Licence keys (PRIVATE!)
-kyc-sdk/tools/licence-generator/keys/private_key.pem
-kyc-sdk/tools/licence-generator/.venv/
-kyc-sdk/tools/licence-generator/licences/
+tools/licence-generator/keys/private_key.pem
+tools/licence-generator/.venv/
+tools/licence-generator/licences/
+
+# SDK source (private — distribute only compiled artifacts)
+sdk/
+kyc-sdk/
+
+# Excluded folders
 IMGS_SRC/
-kyc-sdk/tools/
-kyc-sdk/demo-app/
+tools/
+demo-app/
+licence-server/
+android-app/
+core/
+platform/
+website/
+web sdk/
 Project.md
 sdmatch.keystore
-*.apk
-kyc-sdk/licence-server/
-kyc-sdk/android-app/
-kyc-sdk/core/
-kyc-sdk/platform/
-*.idsig
-*.apk
+
+# Secrets
+adminsecret.md
+
+# Release artifacts (on GitHub Releases only)
+sdkmatch-*.zip
+sdkmatch-*.aar

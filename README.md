@@ -1,124 +1,170 @@
-# 🛡️ SDK MATCH — KYC Mobile SDK (On-Device)
+# SDK MATCH — KYC Mobile SDK (On-Device)
 
-<p align="center">
-  <strong>Scanner. Vérifier. Valider.</strong><br>
-  SDK de vérification d'identité 100% on-device pour les documents marocains.
-</p>
+**Scanner. Verifier. Valider.**
+SDK de verification d'identite 100% on-device pour les documents marocains.
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalites
 
-| | Feature | Description |
-|---|---------|-------------|
-| 📄 | **OCR & MRZ** | Lecture automatique (CIN v1, CIN v2, Passeport, Permis) |
-| 🧠 | **MRZ Parser** | ICAO 9303 complet (TD1/TD2/TD3), check digits |
-| 👤 | **Face Matching** | ML Kit Face Detection + comparaison document/selfie |
-| ✅ | **Passive Liveness** | Détection de vivacité (anti-spoofing) |
-| 📸 | **CameraX** | Caméra embarquée native avec guidage temps réel |
-| 🔤 | **ML Kit OCR** | Google ML Kit Text Recognition on-device |
-| 🧕 | **Seuils Adaptatifs** | Lunettes (0.70), Hijab+lunettes (0.65), standard (0.75) |
-| 🔒 | **Privacy First** | Zéro cloud, données éphémères |
-| 🔑 | **Licence Server** | Cloudflare Workers + D1 |
+| Feature | Description |
+|---------|-------------|
+| **OCR & MRZ** | Lecture automatique (CIN v1, CIN v2, Passeport, Permis de conduire) |
+| **MRZ Parser** | ICAO 9303 complet (TD1/TD2/TD3), check digits, correction OCR |
+| **Face Matching** | ML Kit Face Detection + comparaison document/selfie (grid cosine similarity) |
+| **Passive Liveness** | Detection de vivacite (yeux ouverts, angle tete, anti-spoofing) |
+| **Image Quality** | Detection de flou (Laplacian), luminosite, validation automatique |
+| **Licence Manager** | Activation API + validation APK signature + grace period |
+| **Privacy First** | Zero cloud, donnees ephemeres, tout tourne sur l'appareil |
 
 ---
 
-## 📱 Application Android Native
+## Telechargement
 
-App de démonstration en **Kotlin natif** :
+### SDK (Fat AAR — autonome, zero dependance)
 
-- 📸 **CameraX** — Preview temps réel intégré dans l'interface
-- 🔤 **ML Kit OCR** — Extraction de texte on-device
-- 👤 **ML Kit Face Detection** — Détection + Liveness passif
-- 📄 **Documents** — CIN v1, CIN v2, Passeport, Permis de conduire
-- 🔄 **Recto/Verso** — Scan des deux côtés avec aperçu
-- 🔦 **Flash** — Toggle flash sur la caméra
-- 📊 **Historique** — Sauvegarde locale des scans
+Depuis les [Releases GitHub](https://github.com/khalilbenaz/SDMatch/releases/tag/v1.0.0) :
 
-### 📥 Télécharger l'APK
+- **`sdkmatch-sdk-v1.0.0.aar`** (43 MB) — SDK complet avec ML Kit, modeles OCR et Face Detection embarques
+- **`sdkmatch-docs-v1.0.0.zip`** — Documentation complete
 
-L'APK est disponible dans les releases du projet.
+> Le fat AAR contient toutes les dependances : ML Kit Text Recognition, Face Detection, modeles OCR, librairies natives (arm64, armeabi-v7a, x86, x86_64). Le client n'a besoin d'ajouter **aucune autre dependance**.
 
----
+### APK Demo
 
-## 🔑 Obtenir une licence
-
-1. Rendez-vous sur **[sdmatch.netlify.app](https://sdmatch.netlify.app/)**
-2. Remplissez le formulaire "Demander une démo"
-3. Recevez votre **API Key** et **API Secret** (7 jours gratuit)
-4. Intégrez dans l'application
+- **`SDK-MATCH-Final.apk`** — Application de demonstration complete
 
 ---
 
-## 🏗️ Architecture
+## Installation rapide (Android)
 
-```
-┌─────────────────────────────┐
-│   📱 App Android Native     │
-│   Kotlin + CameraX + ML Kit │
-└────────────┬────────────────┘
-             │
-┌────────────▼────────────────┐
-│   ⚙️ C++ Core Engine        │
-│   📄 MRZ Parser (ICAO 9303) │
-│   👤 Face Match + Liveness   │
-│   🔍 Quality Control         │
-│   🔐 Licence Validator       │
-└────────────┬────────────────┘
-             │ FFI / JNI
-┌────────────▼────────────────┐
-│   🔌 Platform Wrappers      │
-│   iOS │ Android │ MAUI      │
-│   Flutter │ React Native    │
-└─────────────────────────────┘
+### 1. Ajouter le AAR au projet
+
+Copier `sdkmatch-sdk-v1.0.0.aar` dans `app/libs/`, puis dans `app/build.gradle.kts` :
+
+```kotlin
+dependencies {
+    implementation(files("libs/sdkmatch-sdk-v1.0.0.aar"))
+}
 ```
 
----
+### 2. Permissions (AndroidManifest.xml)
 
-## 📚 Documentation
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-feature android:name="android.hardware.camera" android:required="true" />
+```
 
-| | Doc | Lien |
-|---|-----|------|
-| 🍎 | Quick Start iOS | [docs/quickstart/ios.md](kyc-sdk/docs/quickstart/ios.md) |
-| 🤖 | Quick Start Android | [docs/quickstart/android.md](kyc-sdk/docs/quickstart/android.md) |
-| 💜 | Quick Start MAUI | [docs/quickstart/maui.md](kyc-sdk/docs/quickstart/maui.md) |
-| 💙 | Quick Start Flutter | [docs/quickstart/flutter.md](kyc-sdk/docs/quickstart/flutter.md) |
-| ⚛️ | Quick Start React Native | [docs/quickstart/react-native.md](kyc-sdk/docs/quickstart/react-native.md) |
-| 📖 | API Reference | [docs/api-reference](kyc-sdk/docs/api-reference/README.md) |
+### 3. Utilisation
 
----
+```kotlin
+import com.sdkmatch.sdk.*
 
-## 🛠️ Tech Stack
+// --- 1. Activer la licence (une seule fois) ---
+val result = LicenceManager.activate(context, "API_KEY", "API_SECRET")
 
-| | Composant | Technologie |
-|---|-----------|-------------|
-| 📱 | App Android | Kotlin natif |
-| 📸 | Caméra | Android CameraX |
-| 🔤 | OCR | Google ML Kit |
-| 👤 | Face Detection | Google ML Kit |
-| ✅ | Liveness | ML Kit (head pose, eyes) |
-| ⚙️ | Core Engine | C++17 |
-| 🔧 | Build | CMake / Gradle |
-| 🌐 | Site Web | HTML/CSS/JS (Netlify) |
-| 🔑 | Licences | Cloudflare Workers + D1 |
+// --- 2. Initialiser le SDK (obligatoire, verifie la licence) ---
+SdkMatch.initialize(context)
+// Toute tentative d'utiliser les classes sans initialize() leve une SecurityException
 
----
+// --- 3. Scanner un document ---
+val ocrText = // ... texte OCR obtenu via ML Kit TextRecognition
+val docType = DocumentDetector.detect(ocrText)
+val fields = DocumentDetector.extractFieldsFromText(ocrText, docType)
 
-## 🌐 Services
+// --- 4. Parser la MRZ ---
+val mrz = MrzParser.parse(ocrText)
+// mrz.firstName, mrz.lastName, mrz.documentNumber, mrz.birthDate...
 
-| | Service | URL |
-|---|---------|-----|
-| 🌐 | Site Vitrine | [sdmatch.netlify.app](https://sdmatch.netlify.app/) |
-| 🔑 | Licence API | [sdmatch-licence-api.khalilbenaz.workers.dev](https://sdmatch-licence-api.khalilbenaz.workers.dev/) |
+// --- 5. Comparer les visages ---
+val match = FaceComparison.compare(documentBitmap, selfieBitmap)
+// match.score, match.isMatch, match.livenessResult.isLive
 
----
+// --- 6. Qualite image ---
+val quality = ImageQuality.assess(bitmap)
+// quality.isAcceptable, quality.isBlurry, quality.brightness
+```
 
-## 📄 Licence
-
-Propriétaire — SDK MATCH © 2026
+> Voir la [documentation complete](docs/) pour les guides detailles et la reference API.
 
 ---
 
-<p align="center">
-  Made in Morocco 🇲🇦
-</p>
+## Architecture
+
+```
++-------------------------------+
+|   Application Android          |
+|   (CameraX + UI)               |
++---------------+---------------+
+                |
++---------------v---------------+
+|   SDK MATCH (Fat AAR)          |
+|                                |
+|  DocumentDetector    MrzParser |
+|  FaceComparison  ImageQuality  |
+|  LicenceManager  BitmapUtils   |
+|                                |
+|  +---------------------------+ |
+|  | ML Kit Text Recognition   | |
+|  | ML Kit Face Detection     | |
+|  | Modeles OCR embarques     | |
+|  | Libs natives (JNI)        | |
+|  +---------------------------+ |
++--------------------------------+
+```
+
+---
+
+## Documents supportes
+
+| Document | MRZ | OCR | Recto/Verso |
+|----------|-----|-----|-------------|
+| CIN Ancienne (v1) | TD1 | Oui | Oui |
+| CIN Nouvelle (v2) | TD1 | Oui | Oui |
+| Passeport | TD3 | Oui | N/A |
+| Permis de conduire | Non | Oui | Oui |
+
+---
+
+## Seuils Face Matching
+
+| Condition | Seuil |
+|-----------|-------|
+| Standard | 0.75 |
+| Lunettes | 0.70 |
+| Hijab + lunettes | 0.65 |
+| Barbe | 0.68 |
+| Retry (seuil bas) | 0.55 |
+
+---
+
+## Configuration requise
+
+- Android API 26+ (Android 8.0)
+- Camera hardware requise
+- Connexion Internet (activation licence uniquement)
+
+---
+
+## Licence
+
+Obtenir une licence d'essai gratuite (7 jours) sur [sdmatch.netlify.app](https://sdmatch.netlify.app/).
+
+---
+
+## Structure du repo
+
+```
+SDMatch/
+├── README.md              # Ce fichier
+├── INTEGRATION.md         # Guide d'integration rapide
+├── CMakeLists.txt         # Build natif C++
+├── docs/
+│   ├── api-reference/     # Reference API complete
+│   ├── quickstart/        # Guides par plateforme
+│   └── examples/          # Exemples de code complets
+└── Releases/
+    ├── sdkmatch-sdk-v1.0.0.aar   # Fat AAR (43 MB)
+    └── sdkmatch-docs-v1.0.0.zip  # Documentation
+```
